@@ -61,9 +61,9 @@ class _TabbarState extends State<Tabbar> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(245, 255, 250, 1),
+        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(245, 255, 250, 1),
+          backgroundColor: Color.fromRGBO(255, 255, 255, 1),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(28.0),
             child: TabBar(
@@ -134,6 +134,7 @@ class _TabbarState extends State<Tabbar> {
           ),
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(), // Mencegah swipe
           children: [
             _buildTabNiat(doaListNiat),
             _buildTabTawaf(doaListTawaf),
@@ -699,59 +700,70 @@ class _TabbarState extends State<Tabbar> {
       children: [
         // Tombol Switch di Bagian Atas
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text("Arab", style: TextStyle(fontSize: 14.0)),
-              Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
-              Text("Arti", style: TextStyle(fontSize: 14.0)),
-            ],
-          ),
-        ),
-        // Switch untuk menampilkan teks
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['arab']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['arab'] = newValue;
-                  });
-                },
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Text("Arab", style: TextStyle(fontSize: 14.0)),
+                        Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
+                        Text("Arti", style: TextStyle(fontSize: 14.0)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['arab']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['arab'] = newValue;
+                            });
+                          },
+                        ),
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['transliteration']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['transliteration'] = newValue;
+                            });
+                          },
+                        ),
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['translation']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['translation'] = newValue;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['transliteration']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['transliteration'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['translation']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['translation'] = newValue;
-                  });
-                },
-              ),
-            ],
+            ),
           ),
         ),
         // Daftar Doa
@@ -824,87 +836,175 @@ class _TabbarState extends State<Tabbar> {
   }
 
   int _selectedRound = 0;
-
+  bool _showSwitchSettings = false;
   Widget _buildTabTawaf(List<List<Map<String, String>>> doaListTawaf) {
     return Column(
       children: [
-        // Dropdown untuk memilih putaran
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: DropdownButton<int>(
-            value: _selectedRound,
-            onChanged: (int? newValue) {
-              setState(() {
-                _selectedRound = newValue!;
-              });
-            },
-            items: List<DropdownMenuItem<int>>.generate(
-              7,
-              (index) => DropdownMenuItem<int>(
-                value: index,
-                child: Text('Putaran ${index + 1}'),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.abc,
+                  color: Color.fromARGB(0, 76, 175, 79),
+                ),
+                tooltip: 'Pengaturan',
+                onPressed: () {},
+              ),
+              Text(
+                "Putaran Tawaf ke-${_selectedRound + 1}",
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings, color: Colors.green),
+                tooltip: 'Pengaturan',
+                onPressed: () {
+                  setState(() {
+                    _showSwitchSettings = !_showSwitchSettings;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+
+        // Lingkaran untuk memilih putaran
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(7, (index) {
+              bool isActive = _selectedRound == index;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedRound = index;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        isActive
+                            ? Colors.white
+                            : const Color.fromARGB(255, 205, 205, 205),
+                    border:
+                        isActive
+                            ? Border.all(color: Colors.green, width: 2.0)
+                            : Border.all(
+                              color: const Color.fromARGB(255, 205, 205, 205),
+                              width: 2.0,
+                            ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: isActive ? Colors.green : Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+
+        // Animasi untuk switch settings
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          height: _showSwitchSettings ? 100 : 0, // Transisi tinggi
+          padding: EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: _showSwitchSettings ? 8.0 : 0,
+          ),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 300,
+                ), // Efek fade out lebih cepat
+                opacity:
+                    _showSwitchSettings ? 1.0 : 0.0, // Animasi transparansi
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Text("Arab", style: TextStyle(fontSize: 14.0)),
+                          Text(
+                            "Transliterasi",
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          Text("Arti", style: TextStyle(fontSize: 14.0)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['arab']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['arab'] = newValue;
+                              });
+                            },
+                          ),
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['transliteration']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['transliteration'] = newValue;
+                              });
+                            },
+                          ),
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['translation']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['translation'] = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ),
-        // Tombol Switch di Bagian Atas
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text("Arab", style: TextStyle(fontSize: 14.0)),
-              Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
-              Text("Arti", style: TextStyle(fontSize: 14.0)),
-            ],
-          ),
-        ),
-        // Switch untuk menampilkan teks
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['arab']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['arab'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['transliteration']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['transliteration'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['translation']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['translation'] = newValue;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-        // Daftar Doa untuk Putaran yang Dipilih
+
+        // Doa List
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -918,54 +1018,76 @@ class _TabbarState extends State<Tabbar> {
                     Text(
                       doa['title']!,
                       style: const TextStyle(
-                        fontSize: 22.0,
-                        letterSpacing: 0.29,
-                        color: Colors.black,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 10.0),
                     if (_switchStates['arab']!)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           doa['arab']!,
-                          textDirection: TextDirection.rtl,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 32.0),
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(fontSize: 28.0),
                         ),
                       ),
                     if (_switchStates['transliteration']!)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           doa['transliteration']!,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 22.0),
+                          style: const TextStyle(fontSize: 20.0),
                         ),
                       ),
                     if (_switchStates['translation']!)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           doa['translation']!,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 15.0),
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ),
                     const SizedBox(height: 16.0),
                   ],
                 );
               },
+            ),
+          ),
+        ),
+
+        // Tombol untuk menyelesaikan putaran
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed:
+                _selectedRound < 6
+                    ? () {
+                      setState(() {
+                        _selectedRound += 1;
+                      });
+                    }
+                    : null, // Disable tombol jika sudah di putaran terakhir
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 12.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+            ),
+            child: Text(
+              _selectedRound < 6
+                  ? 'Selesaikan Putaran ke-${_selectedRound + 1}'
+                  : 'Putaran Selesai',
+              style: const TextStyle(fontSize: 18.0, color: Colors.white),
             ),
           ),
         ),
@@ -978,80 +1100,164 @@ class _TabbarState extends State<Tabbar> {
   Widget _buildTabSai(List<List<Map<String, String>>> doaListSai) {
     return Column(
       children: [
-        // Dropdown untuk memilih putaran
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: DropdownButton<int>(
-            value: _selectedRoundSai,
-            onChanged: (int? newValue) {
-              setState(() {
-                _selectedRoundSai = newValue!;
-              });
-            },
-            items: List<DropdownMenuItem<int>>.generate(
-              7,
-              (index) => DropdownMenuItem<int>(
-                value: index,
-                child: Text('Perjalanan ${index + 1}'),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment:
+                MainAxisAlignment.spaceBetween, // Pusatkan teks di tengah
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.abc,
+                  color: Color.fromARGB(0, 76, 175, 79),
+                ),
+                tooltip: 'Pengaturan',
+                onPressed: () {},
+              ),
+              Text(
+                "Putaran Sa'i ke-${_selectedRoundSai + 1}",
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              // const Spacer(), // Mendorong IconButton ke kanan
+              IconButton(
+                icon: const Icon(Icons.settings, color: Colors.green),
+                tooltip: 'Pengaturan',
+                onPressed: () {
+                  setState(() {
+                    _showSwitchSettings = !_showSwitchSettings;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+
+        // Lingkaran untuk memilih putaran
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(7, (index) {
+              bool isActive = _selectedRoundSai == index;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedRoundSai = index;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        isActive
+                            ? Colors.white
+                            : const Color.fromARGB(255, 205, 205, 205),
+                    border:
+                        isActive
+                            ? Border.all(color: Colors.green, width: 2.0)
+                            : Border.all(
+                              color: const Color.fromARGB(255, 205, 205, 205),
+                              width: 2.0,
+                            ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: isActive ? Colors.green : Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          height: _showSwitchSettings ? 100 : 0, // Transisi tinggi
+          padding: EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: _showSwitchSettings ? 8.0 : 0,
+          ),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 300,
+                ), // Efek fade out lebih cepat
+                opacity:
+                    _showSwitchSettings ? 1.0 : 0.0, // Animasi transparansi
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Text("Arab", style: TextStyle(fontSize: 14.0)),
+                          Text(
+                            "Transliterasi",
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          Text("Arti", style: TextStyle(fontSize: 14.0)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['arab']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['arab'] = newValue;
+                              });
+                            },
+                          ),
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['transliteration']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['transliteration'] = newValue;
+                              });
+                            },
+                          ),
+                          Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.green,
+                            inactiveThumbColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: _switchStates['translation']!,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _switchStates['translation'] = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        // Tombol Switch di Bagian Atas
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text("Arab", style: TextStyle(fontSize: 14.0)),
-              Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
-              Text("Arti", style: TextStyle(fontSize: 14.0)),
-            ],
-          ),
-        ),
-        // Switch untuk menampilkan teks
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['arab']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['arab'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['transliteration']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['transliteration'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['translation']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['translation'] = newValue;
-                  });
-                },
-              ),
-            ],
           ),
         ),
         // Daftar Doa untuk Putaran yang Dipilih
@@ -1068,7 +1274,7 @@ class _TabbarState extends State<Tabbar> {
                     Text(
                       doa['title']!,
                       style: const TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 18.0,
                         letterSpacing: 0.29,
                         color: Colors.black,
                         fontWeight: FontWeight.w700,
@@ -1085,7 +1291,7 @@ class _TabbarState extends State<Tabbar> {
                           doa['arab']!,
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 32.0),
+                          style: const TextStyle(fontSize: 28.0),
                         ),
                       ),
                     if (_switchStates['transliteration']!)
@@ -1097,7 +1303,10 @@ class _TabbarState extends State<Tabbar> {
                         child: Text(
                           doa['transliteration']!,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(fontSize: 22.0),
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ),
                     if (_switchStates['translation']!)
@@ -1119,6 +1328,36 @@ class _TabbarState extends State<Tabbar> {
             ),
           ),
         ),
+        // Tombol untuk menyelesaikan putaran
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed:
+                _selectedRoundSai < 6
+                    ? () {
+                      setState(() {
+                        _selectedRoundSai += 1;
+                      });
+                    }
+                    : null, // Disable tombol jika sudah di putaran terakhir
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 12.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: Text(
+              _selectedRoundSai < 6
+                  ? 'Selesaikan Putaran ke-${_selectedRoundSai + 1}'
+                  : 'Putaran Selesai',
+              style: const TextStyle(fontSize: 18.0, color: Colors.white),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -1128,59 +1367,70 @@ class _TabbarState extends State<Tabbar> {
       children: [
         // Tombol Switch di Bagian Atas
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text("Arab", style: TextStyle(fontSize: 14.0)),
-              Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
-              Text("Arti", style: TextStyle(fontSize: 14.0)),
-            ],
-          ),
-        ),
-        // Switch untuk menampilkan teks
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['arab']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['arab'] = newValue;
-                  });
-                },
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Text("Arab", style: TextStyle(fontSize: 14.0)),
+                        Text("Transliterasi", style: TextStyle(fontSize: 14.0)),
+                        Text("Arti", style: TextStyle(fontSize: 14.0)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['arab']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['arab'] = newValue;
+                            });
+                          },
+                        ),
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['transliteration']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['transliteration'] = newValue;
+                            });
+                          },
+                        ),
+                        Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: _switchStates['translation']!,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _switchStates['translation'] = newValue;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['transliteration']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['transliteration'] = newValue;
-                  });
-                },
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                value: _switchStates['translation']!,
-                onChanged: (newValue) {
-                  setState(() {
-                    _switchStates['translation'] = newValue;
-                  });
-                },
-              ),
-            ],
+            ),
           ),
         ),
         // Daftar Doa

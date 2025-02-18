@@ -59,10 +59,10 @@ class _SholatState extends State<Sholat> {
                   icon: const Icon(Icons.explore),
                   tooltip: 'Arah Kiblat',
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Qiblah()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const Qiblah()),
+                    // );
                   },
                 ),
               ],

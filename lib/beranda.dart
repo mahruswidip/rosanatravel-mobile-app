@@ -13,7 +13,6 @@ import 'artikel/detailartikel.dart';
 import 'paket/detailpaket.dart';
 // import 'panduan/pilihan.dart';
 import 'sholat/qiblah.dart';
-import 'sholat/sholat.dart';
 import 'widget/button.dart';
 
 class Service {
@@ -161,14 +160,14 @@ class _BerandaPageState extends State<BerandaPage> {
                         ),
                         padding: const EdgeInsets.symmetric(
                           vertical: 20.0,
-                          horizontal: 15.0,
+                          horizontal: 48.0,
                         ),
                         child: Wrap(
                           alignment:
                               WrapAlignment
                                   .center, // Menyelaraskan widget di tengah
-                          spacing: 10.0, // Jarak horizontal antar widget
-                          runSpacing: 10.0, // Jarak vertikal antar baris
+                          spacing: 25, // Jarak horizontal antar widget
+                          runSpacing: 15.0, // Jarak vertikal antar baris
                           children: [
                             MyHomeMainButton(
                               onTap: () {
@@ -198,12 +197,12 @@ class _BerandaPageState extends State<BerandaPage> {
                             ),
                             MyHomeMainButtonAmber(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Sholat(),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => const Sholat(),
+                                //   ),
+                                // );
                               },
                               color: Colors.amber,
                               asset: 'assets/svg/menu_utama/sholat.svg',
@@ -214,7 +213,7 @@ class _BerandaPageState extends State<BerandaPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Qiblah(),
+                                    builder: (context) => QiblaCompassApp(),
                                   ),
                                 );
                               },
@@ -236,7 +235,7 @@ class _BerandaPageState extends State<BerandaPage> {
                               },
                               color: Colors.amber,
                               asset: 'assets/svg/menu_utama/headset.svg',
-                              text: 'Ear Hajj Virtual',
+                              text: 'Ear Hajj',
                             ),
                           ],
                         ),

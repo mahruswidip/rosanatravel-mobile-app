@@ -44,11 +44,11 @@ dependencies:
   permission_handler: ^11.3.1
   flutter_launcher_icons: ^0.14.3
   cached_network_image: ^3.3.0
-  flutter_qiblah: ^3.0.4
   geolocator: ^13.0.2
   line_icons: ^2.0.3
   location: ^8.0.0
   adhan: ^2.0.0+1
+  flutter_compass: ^0.8.1
 
 
 dev_dependencies:
