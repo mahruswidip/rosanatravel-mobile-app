@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
-import 'package:rosanatravel/sholat/sholat.dart';
 
 import 'qiblah/loading_indicator.dart';
 import 'qiblah/qiblah_compass.dart';
+import 'sholat.dart';
 
 class Qiblah extends StatefulWidget {
   const Qiblah({super.key});

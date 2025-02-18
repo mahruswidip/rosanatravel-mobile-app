@@ -5,9 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:rosanatravel/doa/doanew.dart';
-import 'package:rosanatravel/umroh/umrohnew.dart';
-import 'package:rosanatravel/voice_call_page.dart';
+import 'doa/doanew.dart';
+import 'umroh/umrohnew.dart';
+import 'voice_call_page.dart';
 import 'apiHelper/dataclass.dart';
 import 'artikel/detailartikel.dart';
 import 'paket/detailpaket.dart';
@@ -134,8 +134,20 @@ class _BerandaPageState extends State<BerandaPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(18, 20, 0, 0),
+              child: Text(
+                'Fitur',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Color.fromARGB(221, 40, 40, 40),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+              padding: const EdgeInsets.fromLTRB(18.0, 5.0, 18.0, 0),
               child: SafeArea(
                 child: Center(
                   // Menempatkan Column di tengah layar
@@ -148,97 +160,107 @@ class _BerandaPageState extends State<BerandaPage> {
                       const SizedBox(height: 10.0),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(2, 3),
-                            ),
-                          ],
-                        ),
+                        color: Colors.white, // Background putih
+                        borderRadius: BorderRadius.circular(12), // Biar rounded
+                        boxShadow: [
+                          // Shadow terang (atas-kiri)
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.8),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(-3, -3),
+                          ),
+                          // Shadow gelap (bawah-kanan)
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(3, 3),
+                          ),
+                        ],
+                      ),
                         padding: const EdgeInsets.symmetric(
                           vertical: 20.0,
-                          horizontal: 15.0,
+                          horizontal: 16.0, // Dikurangi agar tidak terlalu lebar
                         ),
-                        child: Wrap(
-                          alignment:
-                              WrapAlignment
-                                  .center, // Menyelaraskan widget di tengah
-                          spacing: 10.0, // Jarak horizontal antar widget
-                          runSpacing: 10.0, // Jarak vertikal antar baris
-                          children: [
-                            MyHomeMainButton(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DoaApp(),
-                                  ),
-                                );
-                              },
-                              color: Colors.amber,
-                              asset: 'assets/svg/menu_utama/book.svg',
-                              text: 'Daftar Doa',
-                            ),
-                            MyHomeMainButton(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const UmrohPage(),
-                                  ),
-                                );
-                              },
-                              color: Colors.amber,
-                              asset: 'assets/svg/menu_utama/umroh.svg',
-                              text: 'Panduan',
-                            ),
-                            MyHomeMainButtonAmber(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Sholat(),
-                                  ),
-                                );
-                              },
-                              color: Colors.amber,
-                              asset: 'assets/svg/menu_utama/sholat.svg',
-                              text: 'Sholat',
-                            ),
-                            MyHomeMainButtonAmber(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Qiblah(),
-                                  ),
-                                );
-                              },
-                              color: Colors.amber,
-                              asset: 'assets/svg/menu_utama/compass.svg',
-                              text: 'Kiblat',
-                            ),
-                            MyHomeMainButtonAmber(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => JoinChannelAudio(
-                                          title: 'Audio Join',
-                                        ),
-                                  ),
-                                );
-                              },
-                              color: Colors.amber,
-                              asset: 'assets/svg/menu_utama/headset.svg',
-                              text: 'Ear Hajj Virtual',
-                            ),
-                          ],
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal, // Mengaktifkan scroll horizontal
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              MyHomeMainButton(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DoaApp(),
+                                    ),
+                                  );
+                                },
+                                color: Colors.amber,
+                                asset: 'assets/svg/menu_utama/book.svg',
+                                text: 'Daftar Doa',
+                              ),
+                              const SizedBox(width: 15), // Jarak antar tombol
+                              MyHomeMainButton(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const UmrohPage(),
+                                    ),
+                                  );
+                                },
+                                color: Colors.amber,
+                                asset: 'assets/svg/menu_utama/umroh.svg',
+                                text: 'Panduan',
+                              ),
+                              const SizedBox(width: 15),
+                              MyHomeMainButtonAmber(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Sholat(),
+                                    ),
+                                  );
+                                },
+                                color: Colors.amber,
+                                asset: 'assets/svg/menu_utama/sholat.svg',
+                                text: 'Sholat',
+                              ),
+                              const SizedBox(width: 15),
+                              MyHomeMainButtonAmber(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Qiblah(),
+                                    ),
+                                  );
+                                },
+                                color: Colors.amber,
+                                asset: 'assets/svg/menu_utama/compass.svg',
+                                text: 'Kiblat',
+                              ),
+                              const SizedBox(width: 15),
+                              MyHomeMainButtonAmber(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => JoinChannelAudio(
+                                        title: 'Audio Join',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                color: Colors.amber,
+                                asset: 'assets/svg/menu_utama/headset.svg',
+                                text: 'Ear Hajj',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -246,9 +268,9 @@ class _BerandaPageState extends State<BerandaPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 0.0),
             const Padding(
-              padding: EdgeInsets.fromLTRB(18, 20, 0, 0),
+              padding: EdgeInsets.fromLTRB(18, 10, 0, 0),
               child: Text(
                 'Paket',
                 style: TextStyle(

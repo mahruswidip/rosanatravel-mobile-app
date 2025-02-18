@@ -1,10 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:rosanatravel/umroh/umrohnew.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
 
+import '../umroh/umrohnew.dart';
 import '../umroh/umrohold.dart';
 
 class IntroUmroh extends StatefulWidget {
