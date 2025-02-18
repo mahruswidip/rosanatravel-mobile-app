@@ -69,8 +69,8 @@ class MyHomeMainButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 55.0,
-          height: 55.0,
+          width: 65.0,
+          height: 65.0,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(50),
@@ -107,7 +107,7 @@ class MyHomeMainButton extends StatelessWidget {
           text,
           style: const TextStyle(
             fontSize: 12.0,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             color: Colors.black87,
           ),
         ),
@@ -136,8 +136,8 @@ class MyHomeMainButtonAmber extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 55.0,
-          height: 55.0,
+          width: 65.0,
+          height: 65.0,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(50),
@@ -174,7 +174,7 @@ class MyHomeMainButtonAmber extends StatelessWidget {
           text,
           style: const TextStyle(
             fontSize: 12.0,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             color: Color.fromARGB(255, 38, 38, 38),
           ),
         ),

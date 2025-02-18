@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/flutter_compass.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:math' as math;
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rosanatravel/beranda.dart';
+import 'package:flutter_qiblah/flutter_qiblah.dart';
 
-void main() {
-  runApp(QiblaCompassApp());
+import 'qiblah/loading_indicator.dart';
+import 'qiblah/qiblah_compass.dart';
+import 'sholat.dart';
+
+class Qiblah extends StatefulWidget {
+  const Qiblah({super.key});
+
+  @override
+  State<Qiblah> createState() => QiblahState();
 }
 
 class QiblaCompassApp extends StatelessWidget {
